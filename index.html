@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ThinkCrea8 Tech Academy — AI Launch Cohort</title>
+<style>
+  :root{
+    --ink:#0E0828;
+    --lime:#C8FF3C;
+    --violet:#4B2CA0;
+    --white:#F7F6FF;
+    --muted:#6B5E8A;
+    --ink-2:#150B3A;
+    --violet-2:#2E1A6B;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  section, footer{ scroll-margin-top:76px; }
+  body{
+    font-family:Arial, Helvetica, sans-serif;
+    background:var(--white);
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  img,svg{display:block;}
+  a{color:inherit; text-decoration:none;}
+  ul{list-style:none;}
+  button{font-family:inherit; cursor:pointer;}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 24px;}
+  .eyebrow{
+    font-weight:700; text-transform:uppercase; letter-spacing:.14em;
+    font-size:12px; color:var(--lime);
+  }
+  .eyebrow.dark{color:var(--violet);}
+  h1,h2,h3{font-weight:900; letter-spacing:-0.01em; line-height:1.05;}
+  p{color:var(--muted); line-height:1.6;}
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    font-weight:700; text-transform:uppercase; letter-spacing:.06em; font-size:13px;
+    padding:16px 30px; border-radius:100px; border:2px solid transparent;
+    transition:transform .18s ease, box-shadow .18s ease, background .18s ease;
+    white-space:nowrap;
+  }
+  .btn-lime{ background:var(--lime); color:var(--ink); }
+  .btn-lime:hover{ transform:translateY(-2px); box-shadow:0 12px 30px rgba(200,255,60,.35); }
+  .btn-outline{ border-color:rgba(247,246,255,.35); color:var(--white); }
+  .btn-outline:hover{ border-color:var(--lime); color:var(--lime); }
+  .btn-ink{ background:var(--ink); color:var(--white); }
+  .btn-ink:hover{ transform:translateY(-2px); box-shadow:0 12px 30px rgba(14,8,40,.25); }
+
+  /* ---------- NAV ---------- */
+  #nav{
+    position:sticky; top:0; z-index:100;
+    background:rgba(14,8,40,.82); backdrop-filter:blur(16px);
+    border-bottom:1px solid rgba(247,246,255,.08);
+  }
+  #nav .row{ display:flex; align-items:center; justify-content:space-between; height:80px; gap:24px; }
+  .logo{ display:flex; align-items:center; gap:10px; font-weight:900; font-size:18px; color:var(--white); flex-shrink:0; }
+  .logo .eight{
+    width:30px; height:30px; border-radius:50%; background:var(--lime); color:var(--ink);
+    display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:900;
+    flex-shrink:0;
+  }
+  .navlinks{ display:flex; gap:8px; align-items:center; }
+  .navlinks a{
+    position:relative; color:rgba(247,246,255,.68); font-weight:700; font-size:12.5px;
+    text-transform:uppercase; letter-spacing:.05em; padding:9px 14px; border-radius:100px;
+    transition:color .18s ease, background .18s ease;
+  }
+  .navlinks a:hover{ color:var(--white); background:rgba(247,246,255,.08); }
+  .navlinks a.navRegister{ color:var(--lime); }
+  .navDivider{ width:1px; height:22px; background:rgba(247,246,255,.14); margin:0 6px; flex-shrink:0; }
+  .navcta{ display:flex; flex-shrink:0; }
+  .navcta .btn{ padding:13px 24px; font-size:12px; }
+  .navToggle{
+    display:none; background:none; border:none; color:var(--white);
+    width:40px; height:40px; align-items:center; justify-content:center;
+    flex-direction:column; gap:5px; position:relative; z-index:120; flex-shrink:0;
+  }
+  .navToggle .bar{ width:22px; height:2px; background:var(--white); border-radius:2px; transition:transform .25s ease, opacity .25s ease; }
+  .navToggle.open .bar:nth-child(1){ transform:translateY(7px) rotate(45deg); }
+  .navToggle.open .bar:nth-child(2){ opacity:0; }
+  .navToggle.open .bar:nth-child(3){ transform:translateY(-7px) rotate(-45deg); }
+
+  .mobileMenu{
+    display:none; position:absolute; top:100%; left:16px; right:16px; z-index:110;
+    background:var(--ink-2); border:1px solid rgba(247,246,255,.12); border-radius:18px;
+    box-shadow:0 24px 60px rgba(0,0,0,.45);
+    padding:10px; flex-direction:column; gap:2px;
+    max-height:0; opacity:0; overflow:hidden; pointer-events:none;
+    transition:max-height .3s ease, opacity .25s ease, margin-top .3s ease;
+    margin-top:-8px;
+  }
+  .mobileMenu.open{ max-height:520px; opacity:1; pointer-events:auto; margin-top:10px; }
+  .mobileMenu a{
+    color:rgba(247,246,255,.85); font-weight:700; font-size:14.5px; text-transform:uppercase;
+    letter-spacing:.03em; padding:14px 14px; border-radius:12px;
+  }
+  .mobileMenu a:hover{ color:var(--lime); background:rgba(247,246,255,.06); }
+  .mobileMenu .btn{ margin:8px 4px 4px; text-align:center; }
+
+  /* ---------- HERO ---------- */
+  #hero{
+    position:relative; overflow:hidden;
+    background:
+      radial-gradient(60% 55% at 82% 8%, rgba(200,255,60,.16), transparent 60%),
+      radial-gradient(70% 70% at 12% 100%, rgba(75,44,160,.55), transparent 60%),
+      linear-gradient(180deg, var(--ink) 0%, var(--ink-2) 100%);
+    padding:96px 0 80px;
+    color:var(--white);
+  }
+  .heroGrid{ display:grid; grid-template-columns:1.15fr .85fr; gap:56px; align-items:center; }
+  .kicker{ display:flex; align-items:center; gap:10px; margin-bottom:22px; }
+  .dot{ width:8px; height:8px; border-radius:50%; background:var(--lime); box-shadow:0 0 12px var(--lime); }
+  h1.hero{ font-size:56px; margin-bottom:22px; }
+  h1.hero .accent{ color:var(--lime); }
+  .heroSub{ color:rgba(247,246,255,.72); font-size:17px; max-width:520px; margin-bottom:34px; }
+  .heroCtas{ display:flex; gap:16px; flex-wrap:wrap; }
+
+  .heroArt{ position:relative; }
+  .card8{
+    position:relative; width:100%; aspect-ratio:1/1; border-radius:28px;
+    background:linear-gradient(155deg, var(--violet) 0%, var(--ink-2) 70%);
+    border:1px solid rgba(247,246,255,.12);
+    box-shadow:0 40px 90px rgba(14,8,40,.55);
+    display:flex; align-items:center; justify-content:center;
+    overflow:hidden;
+  }
+  .card8::before{
+    content:"8"; position:absolute; font-weight:900; font-size:420px; color:rgba(200,255,60,.07);
+    right:-70px; bottom:-140px; line-height:1;
+  }
+  .floatChip{
+    position:absolute; background:rgba(247,246,255,.08); border:1px solid rgba(247,246,255,.16);
+    border-radius:14px; padding:12px 16px; backdrop-filter:blur(6px);
+    font-size:12px; font-weight:700; color:var(--white); text-transform:uppercase; letter-spacing:.04em;
+    display:flex; align-items:center; gap:8px;
+    animation:float 5s ease-in-out infinite;
+  }
+  .floatChip .sq{ width:8px; height:8px; background:var(--lime); border-radius:2px; }
+  .chip1{ top:10%; left:8%; animation-delay:0s; }
+  .chip2{ bottom:14%; right:8%; animation-delay:1.2s; }
+  .chip3{ top:44%; left:-6%; animation-delay:2.4s; }
+  @keyframes float{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+  @media (prefers-reduced-motion: reduce){ .floatChip{ animation:none; } }
+
+  /* ---------- COHORT BANNER ---------- */
+  #cohort{
+    background:var(--lime); color:var(--ink); padding:56px 0;
+    position:relative;
+  }
+  .cohortTop{ text-align:center; margin-bottom:34px; }
+  .cohortTop .eyebrow{ color:var(--violet); }
+  .cohortTop h2{ font-size:34px; margin-top:8px; }
+  .cohortGrid{ display:grid; grid-template-columns:1.3fr 1fr; gap:28px; align-items:stretch; }
+  .factRow{
+    background:var(--ink); color:var(--white); border-radius:20px; padding:30px;
+    display:grid; grid-template-columns:repeat(2,1fr); gap:18px;
+  }
+  .fact{ display:flex; flex-direction:column; gap:4px; }
+  .fact .label{ font-size:11px; text-transform:uppercase; letter-spacing:.08em; color:var(--lime); font-weight:700; }
+  .fact .val{ font-weight:900; font-size:17px; }
+  .priceCard{
+    background:var(--white); border-radius:20px; padding:28px; position:relative;
+    border:2px solid var(--ink); display:flex; flex-direction:column; gap:14px; justify-content:center;
+  }
+  .badge{
+    position:absolute; top:-14px; right:20px; background:var(--violet); color:var(--white);
+    font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.06em;
+    padding:8px 14px; border-radius:100px;
+  }
+  .priceRow{ display:flex; align-items:baseline; gap:10px; }
+  .priceRow.strike .amt{ text-decoration:line-through; color:var(--muted); font-size:20px; font-weight:700; }
+  .priceRow .lbl{ font-size:12px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); font-weight:700; }
+  .priceRow.pioneer .amt{ font-size:40px; font-weight:900; color:var(--ink); }
+
+  /* ---------- SECTION generic ---------- */
+  section{ padding:100px 0; }
+  .sectionHead{ text-align:center; max-width:640px; margin:0 auto 56px; }
+  .sectionHead h2{ font-size:38px; margin-top:10px; color:var(--ink); }
+  .sectionHead p{ margin-top:14px; font-size:16px; }
+
+  /* ---------- SCROLL REVEAL ---------- */
+  .reveal{
+    opacity:0; transform:translateY(36px);
+    transition:opacity .8s cubic-bezier(.16,.8,.3,1), transform .8s cubic-bezier(.16,.8,.3,1);
+    will-change:opacity, transform;
+  }
+  .reveal.visible{ opacity:1; transform:translateY(0); }
+  .reveal-stagger > *{
+    opacity:0; transform:translateY(28px);
+    transition:opacity .7s cubic-bezier(.16,.8,.3,1), transform .7s cubic-bezier(.16,.8,.3,1);
+  }
+  .reveal-stagger.visible > *{ opacity:1; transform:translateY(0); }
+  .reveal-stagger.visible > *:nth-child(1){ transition-delay:.02s; }
+  .reveal-stagger.visible > *:nth-child(2){ transition-delay:.09s; }
+  .reveal-stagger.visible > *:nth-child(3){ transition-delay:.16s; }
+  .reveal-stagger.visible > *:nth-child(4){ transition-delay:.23s; }
+  .reveal-stagger.visible > *:nth-child(5){ transition-delay:.30s; }
+  .reveal-stagger.visible > *:nth-child(6){ transition-delay:.37s; }
+  .reveal-stagger.visible > *:nth-child(7){ transition-delay:.44s; }
+  .reveal-stagger.visible > *:nth-child(8){ transition-delay:.51s; }
+  .reveal-stagger.visible > *:nth-child(9){ transition-delay:.58s; }
+  @media (prefers-reduced-motion: reduce){
+    .reveal, .reveal-stagger > *{ opacity:1; transform:none; transition:none; }
+  }
+
+  /* ---------- COURSES ---------- */
+  #courses{ background:var(--white); }
+  .courseGrid{ display:grid; grid-template-columns:repeat(2,1fr); gap:24px; }
+  .courseCard{
+    background:var(--ink); color:var(--white); border-radius:22px; padding:34px;
+    position:relative; overflow:hidden; border:1px solid rgba(14,8,40,.06);
+    cursor:pointer;
+    transition:transform .3s cubic-bezier(.16,.8,.3,1), box-shadow .3s ease, border-color .3s ease;
+  }
+  .courseCard::after{
+    content:""; position:absolute; inset:0; border-radius:22px; padding:1px;
+    background:linear-gradient(135deg, rgba(200,255,60,0), rgba(200,255,60,0));
+    transition:background .3s ease; pointer-events:none;
+  }
+  .courseCard:hover, .courseCard:focus-visible{
+    transform:translateY(-8px);
+    box-shadow:0 30px 60px rgba(14,8,40,.28);
+    border-color:rgba(200,255,60,.4);
+    outline:none;
+  }
+  .courseCard .num{
+    font-weight:900; font-size:13px; color:var(--lime); letter-spacing:.1em;
+    text-transform:uppercase; margin-bottom:14px; display:block;
+  }
+  .courseCard h3{ font-size:22px; color:var(--white); margin-bottom:10px; }
+  .courseCard p.desc{ color:rgba(247,246,255,.68); font-size:14.5px; margin-bottom:22px; }
+  .viewMore{
+    display:inline-flex; align-items:center; gap:8px; font-weight:700; font-size:12.5px;
+    text-transform:uppercase; letter-spacing:.05em; color:var(--lime);
+  }
+  .viewMore .arrow{ transition:transform .25s ease; }
+  .courseCard:hover .viewMore .arrow, .courseCard:focus-visible .viewMore .arrow{ transform:translateX(6px); }
+  .outcome{
+    border-top:1px solid rgba(247,246,255,.14); padding-top:16px; font-size:12.5px;
+    color:var(--lime); font-weight:700; text-transform:uppercase; letter-spacing:.03em;
+  }
+
+  /* ---------- COURSE MODAL ---------- */
+  .modalOverlay{
+    position:fixed; inset:0; z-index:200;
+    background:rgba(14,8,40,.72); backdrop-filter:blur(6px);
+    display:flex; align-items:center; justify-content:center; padding:24px;
+    opacity:0; pointer-events:none;
+    transition:opacity .3s ease;
+  }
+  .modalOverlay.open{ opacity:1; pointer-events:auto; }
+  .modalCard{
+    max-width:560px; width:100%; position:relative;
+    perspective:1800px;
+    transform:scale(.92) translateY(24px); opacity:0;
+    transition:transform .35s cubic-bezier(.16,.8,.3,1), opacity .3s ease;
+  }
+  .modalOverlay.open .modalCard{ transform:scale(1) translateY(0); opacity:1; }
+  .modalClose{
+    position:absolute; top:20px; right:20px; z-index:5; width:38px; height:38px; border-radius:50%;
+    background:rgba(247,246,255,.1); border:1px solid rgba(247,246,255,.2); color:var(--white);
+    font-size:20px; line-height:1; display:flex; align-items:center; justify-content:center;
+    transition:background .2s ease, transform .2s ease;
+  }
+  .modalClose:hover{ background:rgba(200,255,60,.2); transform:rotate(90deg); }
+  .modalFlip{
+    position:relative; width:100%; height:540px;
+    transform-style:preserve-3d;
+    transition:transform .65s cubic-bezier(.4,.15,.2,1);
+  }
+  .modalFlip.flipped{ transform:rotateY(180deg); }
+  .modalFace{
+    position:absolute; inset:0; border-radius:26px; background:var(--ink);
+    border:1px solid rgba(247,246,255,.1); padding:44px; overflow-y:auto;
+    backface-visibility:hidden; -webkit-backface-visibility:hidden;
+    display:flex; flex-direction:column;
+  }
+  .modalFace.back{ transform:rotateY(180deg); }
+  .modalFace .num{
+    font-weight:900; font-size:13px; color:var(--lime); letter-spacing:.1em;
+    text-transform:uppercase; margin-bottom:14px; display:block; padding-right:40px;
+  }
+  .modalFace h3{ font-size:26px; color:var(--white); margin-bottom:14px; }
+  .modalFace p.desc{ color:rgba(247,246,255,.68); font-size:15px; margin-bottom:26px; }
+  .modalFace ul{ display:flex; flex-direction:column; gap:11px; margin-bottom:24px; }
+  .modalFace li{ font-size:14px; color:rgba(247,246,255,.85); display:flex; gap:10px; align-items:flex-start; }
+  .modalFace li::before{ content:"—"; color:var(--lime); flex-shrink:0; }
+  .modalFace .outcome{
+    border-top:1px solid rgba(247,246,255,.14); padding-top:16px; font-size:12.5px;
+    color:var(--lime); font-weight:700; text-transform:uppercase; letter-spacing:.03em;
+    margin-top:auto;
+  }
+  .flipBtn{
+    display:inline-flex; align-items:center; gap:8px; font-weight:700; font-size:12.5px;
+    text-transform:uppercase; letter-spacing:.05em; color:var(--ink); background:var(--lime);
+    border:none; border-radius:100px; padding:14px 22px; margin-top:auto; align-self:flex-start;
+    transition:transform .2s ease, box-shadow .2s ease;
+  }
+  .flipBtn:hover{ transform:translateY(-2px); box-shadow:0 12px 24px rgba(200,255,60,.3); }
+  .backBtn{
+    display:inline-flex; align-items:center; gap:8px; font-weight:700; font-size:12.5px;
+    text-transform:uppercase; letter-spacing:.05em; color:rgba(247,246,255,.75); background:none;
+    border:1px solid rgba(247,246,255,.22); border-radius:100px; padding:11px 18px;
+    margin-bottom:18px; align-self:flex-start; transition:color .2s ease, border-color .2s ease;
+  }
+  .backBtn:hover{ color:var(--lime); border-color:var(--lime); }
+  @media (prefers-reduced-motion: reduce){
+    .modalOverlay, .modalCard, .modalFlip{ transition:none; }
+  }
+  @media (max-width:600px){
+    .modalFlip{ height:70vh; }
+    .modalFace{ padding:30px 26px; }
+  }
+
+  /* ---------- BONUS ---------- */
+  #bonus{
+    background:linear-gradient(135deg, var(--violet) 0%, var(--ink) 100%); color:var(--white);
+  }
+  .bonusInner{ display:grid; grid-template-columns:1fr 1fr; gap:56px; align-items:center; }
+  .bonusList{ display:flex; flex-direction:column; gap:14px; margin-top:24px; }
+  .bonusList li{ font-size:15px; display:flex; gap:12px; align-items:flex-start; color:rgba(247,246,255,.85); }
+  .bonusList li::before{ content:"✔"; color:var(--lime); font-weight:900; }
+  .platRow{ display:flex; gap:14px; margin-top:30px; flex-wrap:wrap; }
+  .platChip{
+    background:rgba(247,246,255,.08); border:1px solid rgba(247,246,255,.18);
+    padding:12px 20px; border-radius:100px; font-size:13px; font-weight:700; letter-spacing:.03em;
+    display:flex; align-items:center; gap:10px; transition:background .2s ease, border-color .2s ease, transform .2s ease;
+  }
+  .platChip:hover{ background:rgba(247,246,255,.14); border-color:rgba(200,255,60,.4); transform:translateY(-2px); }
+  .platChip iconify-icon{ font-size:19px; color:var(--lime); }
+  .bonusArt{
+    aspect-ratio:1/1; border-radius:24px; background:rgba(247,246,255,.06);
+    border:1px solid rgba(247,246,255,.14); display:flex; align-items:center; justify-content:center;
+    font-size:180px; font-weight:900; color:rgba(200,255,60,.14);
+  }
+
+  /* ---------- ACHIEVE ---------- */
+  #achieve{ background:var(--white); }
+  .achieveGrid{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+  .achItem{
+    background:var(--white); border:1px solid rgba(14,8,40,.1); border-radius:16px; padding:22px;
+    display:flex; align-items:center; gap:14px; font-weight:700; font-size:14.5px; color:var(--ink);
+  }
+  .achItem .check{
+    width:30px; height:30px; border-radius:50%; background:var(--lime); flex-shrink:0;
+    display:flex; align-items:center; justify-content:center; font-weight:900; color:var(--ink);
+  }
+
+  /* ---------- WHY ---------- */
+  #why{ background:var(--ink); color:var(--white); }
+  #why .sectionHead h2{ color:var(--white); }
+  .whyGrid{ display:grid; grid-template-columns:repeat(4,1fr); gap:20px; }
+  .whyCard{ border-top:2px solid var(--lime); padding-top:18px; }
+  .whyCard .idx{ color:var(--lime); font-weight:900; font-size:13px; letter-spacing:.08em; }
+  .whyCard h3{ font-size:19px; color:var(--white); margin:10px 0 8px; }
+  .whyCard p{ font-size:14px; color:rgba(247,246,255,.68); }
+
+  /* ---------- JOURNEY ---------- */
+  #journey{ background:var(--white); overflow:hidden; }
+  .journeyTrack{ display:flex; align-items:stretch; justify-content:space-between; gap:0; position:relative; }
+  .journeyTrack::before{
+    content:""; position:absolute; top:22px; left:5%; right:5%; height:2px;
+    background:repeating-linear-gradient(90deg, var(--muted) 0 8px, transparent 8px 16px);
+    opacity:.35; z-index:0;
+  }
+  .jStep{ position:relative; z-index:1; flex:1; text-align:center; padding:0 8px; }
+  .jStep .node{
+    width:46px; height:46px; border-radius:50%; background:var(--ink); color:var(--lime);
+    display:flex; align-items:center; justify-content:center; margin:0 auto 16px;
+    font-weight:900; font-size:14px; border:3px solid var(--lime);
+  }
+  .jStep h4{ font-weight:900; text-transform:uppercase; letter-spacing:.05em; font-size:15px; margin-bottom:6px; }
+  .jStep p{ font-size:12.5px; }
+
+  /* ---------- FORM ---------- */
+  #register{
+    background:linear-gradient(180deg, var(--violet-2) 0%, var(--ink) 100%); color:var(--white);
+  }
+  .regGrid{ display:grid; grid-template-columns:.85fr 1.15fr; gap:56px; }
+  .regLeft h2{ font-size:36px; color:var(--white); }
+  .regLeft p{ margin-top:14px; color:rgba(247,246,255,.72); max-width:400px; }
+  .regNote{
+    margin-top:30px; padding:18px 20px; border-radius:16px; background:rgba(247,246,255,.06);
+    border:1px solid rgba(247,246,255,.14); font-size:13.5px; color:rgba(247,246,255,.8);
+  }
+  form{ background:var(--white); border-radius:22px; padding:34px; color:var(--ink); }
+  .fRow{ display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px; }
+  .field{ display:flex; flex-direction:column; gap:6px; margin-bottom:16px; }
+  .field label{ font-size:11.5px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); }
+  .field input, .field select, .field textarea{
+    border:1.5px solid rgba(14,8,40,.15); border-radius:10px; padding:12px 14px; font-size:14px;
+    font-family:inherit; background:var(--white); color:var(--ink);
+  }
+  .field input:focus, .field select:focus, .field textarea:focus{
+    outline:2px solid var(--violet); outline-offset:1px; border-color:var(--violet);
+  }
+  .field textarea{ resize:vertical; min-height:80px; }
+  .submitBtn{ width:100%; margin-top:6px; }
+  .formMsg{
+    display:none; margin-top:16px; padding:16px 18px; border-radius:12px;
+    background:rgba(200,255,60,.18); border:1px solid rgba(75,44,160,.25); font-size:13.5px; color:var(--ink);
+    font-weight:700;
+  }
+
+  /* ---------- TESTIMONIALS ---------- */
+  #testi{ background:var(--white); }
+  .testiGrid{ display:grid; grid-template-columns:repeat(3,1fr); gap:22px; }
+  .testiCard{ background:var(--white); border:1px solid rgba(14,8,40,.1); border-radius:18px; padding:26px; }
+  .avatarRow{ display:flex; align-items:center; gap:12px; margin-bottom:16px; }
+  .avatar{
+    width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    font-weight:900; color:var(--ink); font-size:15px;
+  }
+  .testiCard p.quote{ color:var(--ink); font-size:14.5px; line-height:1.6; margin-bottom:14px; }
+  .testiName{ font-weight:700; font-size:13px; }
+  .testiRole{ font-size:12px; color:var(--muted); }
+
+  /* ---------- FAQ ---------- */
+  #faq{ background:var(--white); }
+  .faqList{ max-width:760px; margin:0 auto; display:flex; flex-direction:column; gap:12px; }
+  .faqItem{ border:1px solid rgba(14,8,40,.12); border-radius:14px; overflow:hidden; }
+  .faqQ{
+    width:100%; background:var(--white); border:none; padding:20px 22px; text-align:left;
+    display:flex; justify-content:space-between; align-items:center; font-weight:700; font-size:15px; color:var(--ink);
+  }
+  .faqQ .plus{ font-size:20px; color:var(--violet); font-weight:900; transition:transform .2s ease; flex-shrink:0; margin-left:14px; }
+  .faqItem.open .plus{ transform:rotate(45deg); }
+  .faqA{ max-height:0; overflow:hidden; transition:max-height .25s ease; }
+  .faqA p{ padding:0 22px 20px; font-size:14px; }
+
+  /* ---------- FOOTER ---------- */
+  footer{ background:var(--ink); color:var(--white); padding:64px 0 30px; }
+  .footGrid{ display:grid; grid-template-columns:1.15fr .8fr .8fr 1.1fr; gap:36px; margin-bottom:48px; }
+  .footBrand .logo{ margin-bottom:14px; }
+  .footBrand p{ color:rgba(247,246,255,.6); max-width:260px; }
+  .footCol h4{ font-size:12px; text-transform:uppercase; letter-spacing:.08em; color:var(--lime); margin-bottom:16px; }
+  .footCol li{ margin-bottom:10px; font-size:14px; color:rgba(247,246,255,.75); }
+  .footCol a{ transition:color .15s ease; }
+  .footCol a:hover{ color:var(--lime); }
+  .footMap{
+    margin-top:16px; border-radius:14px; overflow:hidden; border:1px solid rgba(247,246,255,.14);
+    height:120px; filter:grayscale(.3) invert(.92) contrast(.9);
+  }
+  .footMap iframe{ width:100%; height:100%; border:0; display:block; }
+  .footMapLink{
+    display:inline-flex; align-items:center; gap:6px; margin-top:10px; font-size:12.5px;
+    font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:var(--lime);
+  }
+  .footBottom{
+    border-top:1px solid rgba(247,246,255,.1); padding-top:26px; text-align:center;
+  }
+  .footBottom .tagline{ font-weight:900; letter-spacing:.02em; color:var(--lime); font-size:15px; }
+  .footBottom .copyright{ margin-top:8px; font-size:12.5px; color:rgba(247,246,255,.5); font-weight:400; }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width:1040px){
+    .navlinks{ display:none; }
+    .navcta{ display:none; }
+    .navToggle{ display:flex; }
+    .mobileMenu{ display:flex; }
+    .footGrid{ grid-template-columns:1fr 1fr; gap:36px 28px; }
+  }
+
+  @media (max-width:920px){
+    .heroGrid, .bonusInner, .cohortGrid, .regGrid{ grid-template-columns:1fr; }
+    .heroArt{ order:-1; max-width:340px; margin:0 auto; }
+    h1.hero{ font-size:38px; }
+    .courseGrid{ grid-template-columns:1fr; }
+    .whyGrid{ grid-template-columns:1fr 1fr; }
+    .achieveGrid{ grid-template-columns:1fr 1fr; }
+    .testiGrid{ grid-template-columns:1fr; }
+    .footGrid{ grid-template-columns:1fr; gap:32px; }
+    .fRow{ grid-template-columns:1fr; }
+    .journeyTrack{ flex-wrap:wrap; row-gap:28px; }
+    .journeyTrack::before{ display:none; }
+    .jStep{ flex:1 1 30%; }
+    section{ padding:64px 0; }
+    #hero{ padding:64px 0 56px; }
+  }
+</style>
+<script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="wrap row">
+    <div class="logo"><span class="eight">8</span>ThinkCrea8</div>
+    <div class="navlinks">
+      <a href="#courses">Courses</a>
+      <a href="#journey">Journey</a>
+      <a href="#testi">Stories</a>
+      <a href="#faq">FAQ</a>
+      <a href="#contact">Contact</a>
+      <span class="navDivider"></span>
+      <a href="#register" class="navRegister">Register</a>
+    </div>
+    <div class="navcta"><a href="#register" class="btn btn-lime">Register Now</a></div>
+    <button class="navToggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
+      <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+    </button>
+  </div>
+  <div class="mobileMenu" id="mobileMenu">
+    <a href="#courses">Courses</a>
+    <a href="#journey">Journey</a>
+    <a href="#register">Register</a>
+    <a href="#testi">Stories</a>
+    <a href="#faq">FAQ</a>
+    <a href="#contact">Contact</a>
+    <a href="#register" class="btn btn-lime">Register Now</a>
+  </div>
+</nav>
+
+<section id="hero">
+  <div class="wrap heroGrid">
+    <div class="reveal" style="transition-delay:.05s;">
+      <div class="kicker"><span class="dot"></span><span class="eyebrow">Cohort 1 · Applications Open</span></div>
+      <h1 class="hero">Build Real <span class="accent">AI Skills</span> in Just 14 Days</h1>
+      <p class="heroSub">Learn practical AI-powered digital skills using your smartphone and free tools — build a live website, create professional graphics and presentations, publish digital documents, and prepare for global freelance opportunities.</p>
+      <div class="heroCtas">
+        <a href="#register" class="btn btn-lime">Register Now</a>
+        <a href="#courses" class="btn btn-outline">View Courses</a>
+      </div>
+    </div>
+    <div class="heroArt reveal" style="transition-delay:.15s;">
+      <div class="card8">
+        <div class="floatChip chip1"><span class="sq"></span>Live Portfolio Website</div>
+        <div class="floatChip chip2"><span class="sq"></span>AI Content Calendar</div>
+        <div class="floatChip chip3"><span class="sq"></span>Fiverr &amp; Upwork Ready</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="cohort">
+  <div class="wrap">
+    <div class="cohortTop reveal">
+      <div class="eyebrow">ThinkCrea8 AI Launch Cohort</div>
+      <h2>From Smartphone User to Digital Creator in 14 Days</h2>
+    </div>
+    <div class="cohortGrid reveal">
+      <div class="factRow">
+        <div class="fact"><span class="label">Duration</span><span class="val">2 Weeks</span></div>
+        <div class="fact"><span class="label">Live Classes</span><span class="val">Saturday &amp; Sunday</span></div>
+        <div class="fact"><span class="label">Assignments</span><span class="val">Monday–Friday</span></div>
+        <div class="fact"><span class="label">Requirements</span><span class="val">Phone Friendly · No Tech Background</span></div>
+      </div>
+      <div class="priceCard">
+        <div class="badge">Limited Pioneer Slots</div>
+        <div class="priceRow strike"><span class="lbl">Real Value</span><span class="amt">₦20,000</span></div>
+        <div class="priceRow pioneer"><span class="lbl">Pioneer Cohort</span><span class="amt">₦5,000</span></div>
+        <a href="#register" class="btn btn-ink">Reserve Your Seat</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="courses">
+  <div class="wrap">
+    <div class="sectionHead reveal">
+      <div class="eyebrow dark">Course Structure</div>
+      <h2>Four Tracks. One Portfolio.</h2>
+      <p>Every track ends with something real: a project you can show, publish, or sell.</p>
+    </div>
+    <div class="courseGrid reveal-stagger">
+
+      <div class="courseCard" data-course="0" tabindex="0" role="button" aria-haspopup="dialog">
+        <span class="num">01 · Software Development</span>
+        <h3>AI for Software Development</h3>
+        <p class="desc">Learn how to build and publish real websites using AI-assisted development tools.</p>
+        <span class="viewMore">View Full Curriculum <span class="arrow">→</span></span>
+      </div>
+
+      <div class="courseCard" data-course="1" tabindex="0" role="button" aria-haspopup="dialog">
+        <span class="num">02 · PowerPoint &amp; PDF</span>
+        <h3>AI for PowerPoint &amp; PDF Creation</h3>
+        <p class="desc">Create professional presentations and polished digital documents with AI.</p>
+        <span class="viewMore">View Full Curriculum <span class="arrow">→</span></span>
+      </div>
+
+      <div class="courseCard" data-course="2" tabindex="0" role="button" aria-haspopup="dialog">
+        <span class="num">03 · Graphics Design</span>
+        <h3>AI for Graphics Design</h3>
+        <p class="desc">Design modern visual content for businesses, events, and personal brands.</p>
+        <span class="viewMore">View Full Curriculum <span class="arrow">→</span></span>
+      </div>
+
+      <div class="courseCard" data-course="3" tabindex="0" role="button" aria-haspopup="dialog">
+        <span class="num">04 · Content Creation</span>
+        <h3>Generative AI for Content Creation</h3>
+        <p class="desc">Use generative AI tools to create consistent, engaging, and creative content.</p>
+        <span class="viewMore">View Full Curriculum <span class="arrow">→</span></span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="modalOverlay" id="courseModalOverlay">
+  <div class="modalCard" id="courseModalCard">
+    <button class="modalClose" id="courseModalClose" aria-label="Close curriculum">×</button>
+    <div class="modalFlip" id="modalFlip" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modalFace front">
+        <span class="num" id="modalNum"></span>
+        <h3 id="modalTitle"></h3>
+        <p class="desc" id="modalDesc"></p>
+        <button class="flipBtn" id="modalFlipToBack">View Full Curriculum <span class="arrow">→</span></button>
+      </div>
+      <div class="modalFace back">
+        <button class="backBtn" id="modalFlipToFront">← Back to Overview</button>
+        <span class="num" id="modalNumBack"></span>
+        <h3 id="modalTitleBack"></h3>
+        <ul id="modalList"></ul>
+        <div class="outcome" id="modalOutcome"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section id="bonus">
+  <div class="wrap bonusInner reveal">
+    <div>
+      <div class="eyebrow">🌍 Bonus Track</div>
+      <h2 style="font-size:32px;color:var(--white);margin-top:10px;">Freelancing &amp; Foreign Client Setup</h2>
+      <ul class="bonusList">
+        <li>Fiverr account creation &amp; gig optimization</li>
+        <li>Upwork profile setup</li>
+        <li>Writing beginner-friendly client proposals</li>
+        <li>Portfolio preparation for international clients</li>
+        <li>Professional communication with foreign clients</li>
+      </ul>
+      <div class="platRow">
+        <div class="platChip"><iconify-icon icon="simple-icons:fiverr"></iconify-icon>Fiverr</div>
+        <div class="platChip"><iconify-icon icon="simple-icons:upwork"></iconify-icon>Upwork</div>
+        <div class="platChip"><iconify-icon icon="simple-icons:github"></iconify-icon>GitHub</div>
+        <div class="platChip"><iconify-icon icon="simple-icons:vercel"></iconify-icon>Vercel</div>
+      </div>
+    </div>
+    <div class="bonusArt">8</div>
+  </div>
+</section>
+
+<section id="achieve">
+  <div class="wrap">
+    <div class="sectionHead reveal">
+      <div class="eyebrow dark">By the End of the Cohort</div>
+      <h2>What You'll Walk Away With</h2>
+    </div>
+    <div class="achieveGrid reveal-stagger">
+      <div class="achItem"><span class="check">✔</span>Live portfolio website</div>
+      <div class="achItem"><span class="check">✔</span>GitHub + Vercel deployment skills</div>
+      <div class="achItem"><span class="check">✔</span>Professional PowerPoint presentation</div>
+      <div class="achItem"><span class="check">✔</span>Branded PDF / ebook project</div>
+      <div class="achItem"><span class="check">✔</span>Graphic design portfolio samples</div>
+      <div class="achItem"><span class="check">✔</span>30-day AI content calendar</div>
+      <div class="achItem"><span class="check">✔</span>Fiverr &amp; Upwork profiles</div>
+      <div class="achItem"><span class="check">✔</span>Freelance-ready portfolio assets</div>
+      <div class="achItem"><span class="check">✔</span>ThinkCrea8 AI Launch Certificate</div>
+    </div>
+  </div>
+</section>
+
+<section id="why">
+  <div class="wrap">
+    <div class="sectionHead reveal">
+      <div class="eyebrow">Why ThinkCrea8</div>
+      <h2>Built for How Young Africa Actually Learns</h2>
+    </div>
+    <div class="whyGrid reveal-stagger">
+      <div class="whyCard"><div class="idx">01</div><h3>Practical</h3><p>Real projects, not theory.</p></div>
+      <div class="whyCard"><div class="idx">02</div><h3>Mobile-First</h3><p>Most activities can be completed with a smartphone.</p></div>
+      <div class="whyCard"><div class="idx">03</div><h3>Portfolio-Focused</h3><p>Every student leaves with visible work.</p></div>
+      <div class="whyCard"><div class="idx">04</div><h3>Future-Ready</h3><p>Learn the AI skills that businesses and clients need right now.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="journey">
+  <div class="wrap">
+    <div class="sectionHead reveal">
+      <div class="eyebrow dark">The ThinkCrea8 Path</div>
+      <h2>Think → Prompt → Crea8 → Publish → Freelance → Earn</h2>
+    </div>
+    <div class="journeyTrack reveal-stagger">
+      <div class="jStep"><div class="node">1</div><h4>Think</h4><p>Identify a real problem worth solving.</p></div>
+      <div class="jStep"><div class="node">2</div><h4>Prompt</h4><p>Direct AI tools with clear, sharp instructions.</p></div>
+      <div class="jStep"><div class="node">3</div><h4>Crea8</h4><p>Turn prompts into websites, decks, and designs.</p></div>
+      <div class="jStep"><div class="node">4</div><h4>Publish</h4><p>Ship it live — on Vercel, PDF, or social.</p></div>
+      <div class="jStep"><div class="node">5</div><h4>Freelance</h4><p>Package the work for Fiverr and Upwork.</p></div>
+      <div class="jStep"><div class="node">6</div><h4>Earn</h4><p>Take on paid work from real clients.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="register">
+  <div class="wrap regGrid reveal">
+    <div class="regLeft">
+      <div class="eyebrow">Reserve Your Seat</div>
+      <h2>Join Cohort 1</h2>
+      <p>Slots are limited to keep the cohort hands-on. Fill in your details below and our team will reach out on WhatsApp with payment and onboarding information.</p>
+      <div class="regNote">Pioneer Cohort price: ₦5,000 (real value ₦20,000). Payment details are sent after registration.</div>
+    </div>
+    <form id="regForm">
+      <div class="fRow">
+        <div class="field"><label for="fname">Full Name</label><input id="fname" type="text" required placeholder="Your full name"></div>
+        <div class="field"><label for="femail">Email Address</label><input id="femail" type="email" required placeholder="you@email.com"></div>
+      </div>
+      <div class="fRow">
+        <div class="field"><label for="fwhatsapp">WhatsApp Number</label><input id="fwhatsapp" type="tel" required placeholder="+234 ..."></div>
+        <div class="field"><label for="fschool">School / University</label><input id="fschool" type="text" required placeholder="e.g. Nasarawa State University"></div>
+      </div>
+      <div class="fRow">
+        <div class="field"><label for="fdept">Department / Course of Study</label><input id="fdept" type="text" placeholder="e.g. Mass Communication"></div>
+        <div class="field"><label for="fstatus">Current Status</label>
+          <select id="fstatus" required>
+            <option value="">Select one</option>
+            <option>Student</option>
+            <option>Graduate</option>
+            <option>NYSC Member</option>
+            <option>Young Professional</option>
+          </select>
+        </div>
+      </div>
+      <div class="fRow">
+        <div class="field"><label for="fskill">Preferred Skill Area</label>
+          <select id="fskill" required>
+            <option value="">Select a track</option>
+            <option>Software Development</option>
+            <option>PowerPoint &amp; PDF</option>
+            <option>Graphics Design</option>
+            <option>Generative AI Content Creation</option>
+          </select>
+        </div>
+        <div class="field"><label for="flaptop">Do You Have a Laptop?</label>
+          <select id="flaptop" required>
+            <option value="">Select one</option>
+            <option>Yes</option>
+            <option>No</option>
+          </select>
+        </div>
+      </div>
+      <div class="field"><label for="fwhy">Why Do You Want to Join?</label><textarea id="fwhy" placeholder="Tell us a little about your goal"></textarea></div>
+      <button type="submit" class="btn btn-lime submitBtn">Join the Cohort</button>
+      <div class="formMsg" id="formMsg">Thank you for registering for the ThinkCrea8 AI Launch Cohort. We've opened WhatsApp with your details pre-filled — just hit send so our team can follow up with payment and onboarding details.</div>
+    </form>
+  </div>
+</section>
+
+<section id="testi">
+  <div class="wrap">
+    <div class="sectionHead reveal">
+      <div class="eyebrow dark">Student Stories</div>
+      <h2>What Cohort Members Are Saying</h2>
+    </div>
+    <div class="testiGrid reveal-stagger">
+      <div class="testiCard">
+        <div class="avatarRow">
+          <div class="avatar" style="background:var(--lime);">T</div>
+          <div><div class="testiName">Tobi A.</div><div class="testiRole">Software Development Track</div></div>
+        </div>
+        <p class="quote">I published my first website online through GitHub and Vercel. Seeing my own link go live felt unreal.</p>
+      </div>
+      <div class="testiCard">
+        <div class="avatarRow">
+          <div class="avatar" style="background:#B7A6E0;">C</div>
+          <div><div class="testiName">Chiamaka N.</div><div class="testiRole">PowerPoint &amp; PDF Track</div></div>
+        </div>
+        <p class="quote">I never knew I could design professional presentations and PDFs with AI. My final deck looked like agency work.</p>
+      </div>
+      <div class="testiCard">
+        <div class="avatarRow">
+          <div class="avatar" style="background:#F7C948;">D</div>
+          <div><div class="testiName">David O.</div><div class="testiRole">Freelancing Bonus Track</div></div>
+        </div>
+        <p class="quote">The Fiverr setup session gave me the confidence to start offering digital services online.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <div class="sectionHead reveal">
+      <div class="eyebrow dark">FAQ</div>
+      <h2>Common Questions</h2>
+    </div>
+    <div class="faqList reveal-stagger">
+      <div class="faqItem">
+        <button class="faqQ">Do I need a laptop?<span class="plus">+</span></button>
+        <div class="faqA"><p>No. Most classes are phone friendly, although a laptop is recommended for the Software Development track.</p></div>
+      </div>
+      <div class="faqItem">
+        <button class="faqQ">Is this for complete beginners?<span class="plus">+</span></button>
+        <div class="faqA"><p>Yes. No prior tech experience is required.</p></div>
+      </div>
+      <div class="faqItem">
+        <button class="faqQ">Will classes be live?<span class="plus">+</span></button>
+        <div class="faqA"><p>Yes. Live sessions hold every Saturday and Sunday.</p></div>
+      </div>
+      <div class="faqItem">
+        <button class="faqQ">Will I receive a certificate?<span class="plus">+</span></button>
+        <div class="faqA"><p>Yes. Students who complete the assignments and final project receive a ThinkCrea8 AI Launch Certificate.</p></div>
+      </div>
+      <div class="faqItem">
+        <button class="faqQ">How do I pay?<span class="plus">+</span></button>
+        <div class="faqA"><p>Payment details are sent via WhatsApp after registration.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="wrap">
+    <div class="footGrid">
+      <div class="footBrand">
+        <div class="logo"><span class="eight">8</span>ThinkCrea8 Tech Academy</div>
+        <p>AI Skills for Students, Graduates &amp; Young Adults</p>
+      </div>
+      <div class="footCol">
+        <h4>Tracks</h4>
+        <ul>
+          <li>AI for Software Development</li>
+          <li>AI for PowerPoint &amp; PDF Creation</li>
+          <li>AI for Graphics Design</li>
+          <li>Generative AI for Content Creation</li>
+        </ul>
+      </div>
+      <div class="footCol">
+        <h4>Sitemap</h4>
+        <ul>
+          <li><a href="#hero">Home</a></li>
+          <li><a href="#courses">Courses</a></li>
+          <li><a href="#journey">Journey</a></li>
+          <li><a href="#register">Register</a></li>
+          <li><a href="#testi">Stories</a></li>
+          <li><a href="#faq">FAQ</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footCol">
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="https://wa.me/2348052798226" target="_blank" rel="noopener">WhatsApp: +234 805 279 8226</a></li>
+          <li><a href="https://t8-academy.vercel.app/" target="_blank" rel="noopener">t8-academy.vercel.app</a></li>
+          <li>Keffi, Nasarawa State, Nigeria</li>
+        </ul>
+        <div class="footMap">
+          <iframe src="https://www.google.com/maps?q=Keffi,Nasarawa+State,Nigeria&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="ThinkCrea8 Tech Academy location map"></iframe>
+        </div>
+        <a class="footMapLink" href="https://www.google.com/maps?q=Keffi,Nasarawa+State,Nigeria" target="_blank" rel="noopener">Open in Google Maps ↗</a>
+      </div>
+    </div>
+    <div class="footBottom">
+      <div class="tagline">Think it. Prompt it. Crea8 it.</div>
+      <div class="copyright">Copyright: ThinkCrea8 Tech Academy 2026.</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Course data for modals
+  var courseData = [
+    {
+      num: '01 · Software Development',
+      title: 'AI for Software Development',
+      desc: 'Learn how to build and publish real websites using AI-assisted development tools.',
+      list: [
+        'AI-assisted website creation',
+        'HTML/CSS basics',
+        'GitHub account &amp; repository setup',
+        'Deploying websites with Vercel',
+        'Building a personal portfolio website',
+        'Publishing live project links'
+      ],
+      outcome: 'Outcome: a live portfolio website hosted on Vercel'
+    },
+    {
+      num: '02 · PowerPoint &amp; PDF',
+      title: 'AI for PowerPoint &amp; PDF Creation',
+      desc: 'Create professional presentations and polished digital documents with AI.',
+      list: [
+        'AI-generated presentation content',
+        'PowerPoint slide design',
+        'Seminar and pitch-deck creation',
+        'PDF report and ebook design',
+        'Exporting branded PDFs',
+        'Presentation storytelling techniques'
+      ],
+      outcome: 'Outcome: a presentation deck + a professionally designed PDF project'
+    },
+    {
+      num: '03 · Graphics Design',
+      title: 'AI for Graphics Design',
+      desc: 'Design modern visual content for businesses, events, and personal brands.',
+      list: [
+        'Flyer and poster design',
+        'Social media graphics &amp; thumbnails',
+        'Brand color and typography basics',
+        'Canva AI workflows',
+        'Portfolio-ready design projects'
+      ],
+      outcome: 'Outcome: 3–5 professional design samples'
+    },
+    {
+      num: '04 · Content Creation',
+      title: 'Generative AI for Content Creation',
+      desc: 'Use generative AI tools to create consistent, engaging, and creative content.',
+      list: [
+        'AI-powered graphic generation',
+        'Social media content &amp; captions',
+        'Storytelling for fictional &amp; creative content',
+        'Content post scheduling',
+        'Weekly content calendar creation',
+        'AI-assisted campaign planning'
+      ],
+      outcome: 'Outcome: a 30-day AI content calendar + creative storytelling samples'
+    }
+  ];
+
+  var modalOverlay = document.getElementById('courseModalOverlay');
+  var modalCard = document.getElementById('courseModalCard');
+  var modalFlip = document.getElementById('modalFlip');
+  var modalClose = document.getElementById('courseModalClose');
+  var modalNum = document.getElementById('modalNum');
+  var modalTitle = document.getElementById('modalTitle');
+  var modalDesc = document.getElementById('modalDesc');
+  var modalNumBack = document.getElementById('modalNumBack');
+  var modalTitleBack = document.getElementById('modalTitleBack');
+  var modalList = document.getElementById('modalList');
+  var modalOutcome = document.getElementById('modalOutcome');
+  var modalFlipToBack = document.getElementById('modalFlipToBack');
+  var modalFlipToFront = document.getElementById('modalFlipToFront');
+  var lastFocusedEl = null;
+
+  function openCourseModal(index){
+    var c = courseData[index];
+    if(!c) return;
+    modalNum.innerHTML = c.num;
+    modalTitle.innerHTML = c.title;
+    modalDesc.innerHTML = c.desc;
+    modalNumBack.innerHTML = c.num;
+    modalTitleBack.innerHTML = c.title;
+    modalList.innerHTML = c.list.map(function(item){ return '<li>' + item + '</li>'; }).join('');
+    modalOutcome.innerHTML = c.outcome;
+    modalFlip.classList.remove('flipped');
+    lastFocusedEl = document.activeElement;
+    modalOverlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    modalClose.focus();
+  }
+
+  function closeCourseModal(){
+    modalOverlay.classList.remove('open');
+    document.body.style.overflow = '';
+    if(lastFocusedEl) lastFocusedEl.focus();
+    setTimeout(function(){ modalFlip.classList.remove('flipped'); }, 350);
+  }
+
+  document.querySelectorAll('.courseCard').forEach(function(card){
+    card.addEventListener('click', function(){
+      openCourseModal(parseInt(card.getAttribute('data-course'), 10));
+    });
+    card.addEventListener('keydown', function(e){
+      if(e.key === 'Enter' || e.key === ' '){
+        e.preventDefault();
+        openCourseModal(parseInt(card.getAttribute('data-course'), 10));
+      }
+    });
+  });
+
+  modalFlipToBack.addEventListener('click', function(){ modalFlip.classList.add('flipped'); });
+  modalFlipToFront.addEventListener('click', function(){ modalFlip.classList.remove('flipped'); });
+  modalClose.addEventListener('click', closeCourseModal);
+  modalOverlay.addEventListener('click', function(e){
+    if(e.target === modalOverlay) closeCourseModal();
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape' && modalOverlay.classList.contains('open')) closeCourseModal();
+  });
+
+  // FAQ accordion
+  document.querySelectorAll('.faqItem').forEach(function(item){
+    var q = item.querySelector('.faqQ');
+    var a = item.querySelector('.faqA');
+    q.addEventListener('click', function(){
+      var isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faqItem.open').forEach(function(openItem){
+        openItem.classList.remove('open');
+        openItem.querySelector('.faqA').style.maxHeight = null;
+      });
+      if(!isOpen){
+        item.classList.add('open');
+        a.style.maxHeight = a.scrollHeight + 'px';
+      }
+    });
+  });
+
+  // Mobile nav toggle
+  var navToggle = document.getElementById('navToggle');
+  var mobileMenu = document.getElementById('mobileMenu');
+  function closeMobileMenu(){
+    navToggle.classList.remove('open');
+    mobileMenu.classList.remove('open');
+    navToggle.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+  navToggle.addEventListener('click', function(){
+    var isOpen = mobileMenu.classList.toggle('open');
+    navToggle.classList.toggle('open', isOpen);
+    navToggle.setAttribute('aria-expanded', String(isOpen));
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  });
+  mobileMenu.querySelectorAll('a').forEach(function(link){
+    link.addEventListener('click', closeMobileMenu);
+  });
+
+  // Scroll reveal animations
+  var revealEls = document.querySelectorAll('.reveal, .reveal-stagger');
+  if('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add('visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+    revealEls.forEach(function(el){ io.observe(el); });
+  } else {
+    revealEls.forEach(function(el){ el.classList.add('visible'); });
+  }
+
+  // Registration form -> WhatsApp handoff
+  var WHATSAPP_NUMBER = '2348052798226';
+  document.getElementById('regForm').addEventListener('submit', function(e){
+    e.preventDefault();
+
+    var name = document.getElementById('fname').value.trim();
+    var email = document.getElementById('femail').value.trim();
+    var whatsapp = document.getElementById('fwhatsapp').value.trim();
+    var school = document.getElementById('fschool').value.trim();
+    var dept = document.getElementById('fdept').value.trim();
+    var status = document.getElementById('fstatus').value;
+    var skill = document.getElementById('fskill').value;
+    var laptop = document.getElementById('flaptop').value;
+    var why = document.getElementById('fwhy').value.trim();
+
+    var lines = [
+      'Hi ThinkCrea8 Tech Academy, I want to register for the AI Launch Cohort.',
+      '',
+      'Full Name: ' + name,
+      'Email: ' + email,
+      'WhatsApp Number: ' + whatsapp,
+      'School / University: ' + school,
+      'Department / Course of Study: ' + (dept || '-'),
+      'Current Status: ' + status,
+      'Preferred Skill Area: ' + skill,
+      'Has Laptop: ' + laptop,
+      'Why I want to join: ' + (why || '-')
+    ];
+    var message = encodeURIComponent(lines.join('\n'));
+    var waUrl = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + message;
+
+    document.getElementById('formMsg').style.display = 'block';
+    this.querySelector('.submitBtn').style.display = 'none';
+
+    window.open(waUrl, '_blank');
+  });
+</script>
+
+</body>
+</html>
